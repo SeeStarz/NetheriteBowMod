@@ -44,7 +44,7 @@ public abstract class MixinFirstPersonRenderer {
                 float f8 = (float) stack.getUseDuration() - ((float) this.mc.player.getItemInUseCount() - partialTicks + 1.0F);
 
                 // Change how fast position changes
-                float f12 = f8 * NetheriteBowItem.chargeTime / 20.0F;
+                float f12 = f8 / NetheriteBowItem.chargeTime;
 
                 f12 = (f12 * f12 + f12 * 2.0F) / 3.0F;
                 if (f12 > 1.0F) {

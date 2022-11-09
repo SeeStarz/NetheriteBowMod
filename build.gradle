@@ -15,7 +15,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 apply plugin: 'org.spongepowered.mixin'
 
-version = '1.0.0'
+version = '2.0.0'
 group = 'com.seestarz.netherite_bow_mod' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'NetheriteBowMod-forge-1.16.5'
 
@@ -145,8 +145,7 @@ dependencies {
     // Real examples
     // compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
     // compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-    runtimeOnly fg.deobf('mezz.java:jei-1.16.5:7.7.1.153')
-//    runtimeOnly fg.deobf('com.morearrows:Xtra+Arrows+Forge:MC1.16+v2.0')
+//    runtimeOnly fg.deobf('mezz.java:jei-1.16.5:7.7.1.153')
 
     // The 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
     // provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'

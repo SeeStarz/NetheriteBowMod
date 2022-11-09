@@ -3,8 +3,6 @@
   "package": "com.seestarz.netherite_bow_mod.core.mixin",
   "compatibilityLevel": "JAVA_8",
   "refmap": "netherite_bow_mod.refmap.json",
-  "mixins": [
-  ],
   "client": [
     "MixinFirstPersonRenderer",
     "MixinPlayerRenderer"

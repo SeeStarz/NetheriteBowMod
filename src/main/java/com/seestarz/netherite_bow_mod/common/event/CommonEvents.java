@@ -5,7 +5,7 @@ import com.seestarz.netherite_bow_mod.common.item.ModItems;
 import com.seestarz.netherite_bow_mod.common.item.custom.NetheriteBowItem;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.*;
+import net.minecraftforge.client.event.FOVUpdateEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
@@ -19,14 +19,14 @@ public class CommonEvents {
 
         if (player.getHeldItemMainhand().getItem() == ModItems.NETHERITE_BOW.get()) {
             int charge = player.getItemInUseMaxCount();
-            float f1 = (float)charge * NetheriteBowItem.chargeTime / 20f;
+            float f1 = (float)charge / NetheriteBowItem.chargeTime;
             if (f1 > 1.0F) {
                 f1 = 1.0F;
             } else {
                 f1 = f1 * f1;
             }
 
-            float fovModifier = 1.0F - f1 * 0.3F;
+            float fovModifier = 1.0F - f1 * NetheriteBowItem.maxZoom;
 
             event.setNewfov(f * fovModifier);
         }

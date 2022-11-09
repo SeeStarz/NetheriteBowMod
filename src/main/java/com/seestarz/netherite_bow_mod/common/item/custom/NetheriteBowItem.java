@@ -1,6 +1,6 @@
 package com.seestarz.netherite_bow_mod.common.item.custom;
 
-import com.seestarz.netherite_bow_mod.core.util.CreateArrow;
+import com.seestarz.netherite_bow_mod.core.config.NetheriteBowConfig;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -14,8 +14,9 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class NetheriteBowItem extends BowItem {
-    public static final float chargeTime = 0.3333f;
-    public static final float velocity_multiplier = 4f;
+    public static final float chargeTime = NetheriteBowConfig.chargeTime.get();
+    public static final float velocityMultiplier = NetheriteBowConfig.velocityMultiplier.get();
+    public static final float maxZoom = NetheriteBowConfig.maxZoom.get();
 
     public NetheriteBowItem(Properties builder) {
 
@@ -25,7 +26,7 @@ public class NetheriteBowItem extends BowItem {
             if (player == null) {
                 return 0.0F;
             } else {
-                return player.getActiveItemStack() != stack ? 0.0F : ((float)(stack.getUseDuration() - player.getItemInUseCount()) )*chargeTime/ 20f;
+                return player.getActiveItemStack() != stack ? 0.0F : ((float)(stack.getUseDuration() - player.getItemInUseCount()) )/ NetheriteBowItem.chargeTime;
             }
         });
         ItemModelsProperties.registerProperty(this, new ResourceLocation("pulling"), (stack, world, player) -> {
@@ -52,21 +53,21 @@ public class NetheriteBowItem extends BowItem {
                 }
 
                 // New velocity calculation
-                float velocity = getVelocity(charge) * velocity_multiplier;
+                float velocity = getVelocity(charge) * velocityMultiplier;
 
-                if (!((double) velocity  < 0.1D * velocity_multiplier)) {
+                if (!((double) velocity  < 0.1D * velocityMultiplier)) {
                     boolean unpickable =
                             isCreative || (ammoStack.getItem() instanceof net.minecraft.item.ArrowItem && ((net.minecraft.item.ArrowItem) ammoStack.getItem()).isInfinite(ammoStack, bowStack, playerentity));
 
                     if (!worldIn.isRemote) {
                         net.minecraft.item.ArrowItem arrowitem = (net.minecraft.item.ArrowItem) (ammoStack.getItem() instanceof net.minecraft.item.ArrowItem ? ammoStack.getItem() : Items.ARROW);
-//                        AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoStack, playerentity);
-//                        arrowEntity = customArrow(arrowEntity);
+                        AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoStack, playerentity);
+                        arrowEntity = customArrow(arrowEntity);
 //                        AbstractArrowEntity arrowEntity = new ModArrowEntity(worldIn, playerentity);
-                        AbstractArrowEntity arrowEntity = CreateArrow.createArrow(worldIn, ammoStack, playerentity);
+//                        AbstractArrowEntity arrowEntity = CreateArrow.createArrow(worldIn, ammoStack, playerentity);
                         arrowEntity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, velocity * 3.0F, 0.3F);
 
-                        if (velocity == 1.0F * velocity_multiplier) {
+                        if (velocity == 1.0F * velocityMultiplier) {
                             arrowEntity.setIsCritical(true);
                         }
 
@@ -111,7 +112,7 @@ public class NetheriteBowItem extends BowItem {
      * Gets the velocity of the arrow entity from the bow's charge
      */
     protected float getVelocity(int charge) {
-        float f = (float)charge *chargeTime/ 20f;
+        float f = (float)charge / NetheriteBowItem.chargeTime;
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F) {
             f = 1.0F;
@@ -124,7 +125,7 @@ public class NetheriteBowItem extends BowItem {
      * How long it takes to use or consume an item
      */
     public int getUseDuration(ItemStack stack) {
-        return (int)(72000/chargeTime);
+        return (int)(72000 * chargeTime / 20);
     }
 
     @Override
