@@ -57,14 +57,12 @@ public class NetheriteBowItem extends BowItem {
 
                 if (!((double) velocity  < 0.1D * velocityMultiplier)) {
                     boolean unpickable =
-                            isCreative || (ammoStack.getItem() instanceof net.minecraft.item.ArrowItem && ((net.minecraft.item.ArrowItem) ammoStack.getItem()).isInfinite(ammoStack, bowStack, playerentity));
+                            isCreative || (ammoStack.getItem() instanceof ArrowItem && ((ArrowItem) ammoStack.getItem()).isInfinite(ammoStack, bowStack, playerentity));
 
                     if (!worldIn.isRemote) {
-                        net.minecraft.item.ArrowItem arrowitem = (net.minecraft.item.ArrowItem) (ammoStack.getItem() instanceof net.minecraft.item.ArrowItem ? ammoStack.getItem() : Items.ARROW);
+                        ArrowItem arrowitem = (ArrowItem) (ammoStack.getItem() instanceof ArrowItem ? ammoStack.getItem() : Items.ARROW);
                         AbstractArrowEntity arrowEntity = arrowitem.createArrow(worldIn, ammoStack, playerentity);
                         arrowEntity = customArrow(arrowEntity);
-//                        AbstractArrowEntity arrowEntity = new ModArrowEntity(worldIn, playerentity);
-//                        AbstractArrowEntity arrowEntity = CreateArrow.createArrow(worldIn, ammoStack, playerentity);
                         arrowEntity.setDirectionAndMovement(playerentity, playerentity.rotationPitch, playerentity.rotationYaw, 0.0F, velocity * 3.0F, 0.3F);
 
                         if (velocity == 1.0F * velocityMultiplier) {
