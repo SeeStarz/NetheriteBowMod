@@ -1,6 +1,7 @@
 package com.seestarz.netherite_bow_mod.common.item.custom;
 
-import com.seestarz.netherite_bow_mod.core.config.NetheriteBowConfig;
+import com.seestarz.netherite_bow_mod.core.config.NetheriteBowClientConfig;
+import com.seestarz.netherite_bow_mod.core.config.NetheriteBowCommonConfig;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.enchantment.Enchantments;
 import net.minecraft.entity.LivingEntity;
@@ -14,9 +15,15 @@ import net.minecraft.util.SoundEvents;
 import net.minecraft.world.World;
 
 public class NetheriteBowItem extends BowItem {
-    public static final float chargeTime = NetheriteBowConfig.chargeTime.get();
-    public static final float velocityMultiplier = NetheriteBowConfig.velocityMultiplier.get();
-    public static final float maxZoom = NetheriteBowConfig.maxZoom.get();
+    public static float getChargeTime() {
+        return NetheriteBowCommonConfig.chargeTime.get().floatValue();
+    }
+    public static float getVelocityMultiplier() {
+        return NetheriteBowCommonConfig.velocityMultiplier.get().floatValue();
+    }
+    public static float getMaxZoom() {
+        return NetheriteBowClientConfig.maxZoom.get().floatValue();
+    }
 
     public NetheriteBowItem(Properties builder) {
 
@@ -26,7 +33,8 @@ public class NetheriteBowItem extends BowItem {
             if (player == null) {
                 return 0.0F;
             } else {
-                return player.getActiveItemStack() != stack ? 0.0F : ((float)(stack.getUseDuration() - player.getItemInUseCount()) )/ NetheriteBowItem.chargeTime;
+                return player.getActiveItemStack() != stack ? 0.0F :
+                        ((float)(stack.getUseDuration() - player.getItemInUseCount()) )/ NetheriteBowItem.getChargeTime();
             }
         });
         ItemModelsProperties.registerProperty(this, new ResourceLocation("pulling"), (stack, world, player) -> {
@@ -53,6 +61,7 @@ public class NetheriteBowItem extends BowItem {
                 }
 
                 // New velocity calculation
+                float velocityMultiplier = NetheriteBowItem.getVelocityMultiplier();
                 float velocity = getVelocity(charge) * velocityMultiplier;
 
                 if (!((double) velocity  < 0.1D * velocityMultiplier)) {
@@ -110,7 +119,7 @@ public class NetheriteBowItem extends BowItem {
      * Gets the velocity of the arrow entity from the bow's charge
      */
     protected float getVelocity(int charge) {
-        float f = (float)charge / NetheriteBowItem.chargeTime;
+        float f = (float)charge / NetheriteBowItem.getChargeTime();
         f = (f * f + f * 2.0F) / 3.0F;
         if (f > 1.0F) {
             f = 1.0F;
@@ -123,7 +132,7 @@ public class NetheriteBowItem extends BowItem {
      * How long it takes to use or consume an item
      */
     public int getUseDuration(ItemStack stack) {
-        return (int)(72000 * chargeTime / 20);
+        return (int)(72000 * NetheriteBowItem.getChargeTime() / 20);
     }
 
     @Override
